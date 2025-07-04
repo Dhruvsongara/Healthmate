@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <span class="chat-title">HealthMate</span>
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <div class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." autofocus onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()"><i class="fas fa-arrow-up"></i></button>
+        </div>
+    </div>
+    
+    <script>
+        function appendMessage(sender, message) {
+            const chatBox = document.getElementById("chat-box");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add(sender);
+            
+            const messageContent = document.createElement("span");
+            messageContent.innerText = message;
+            messageDiv.appendChild(messageContent);
+            
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input");
+            const query = userInput.value.trim();
+            if (!query) return;
+
+            appendMessage("user-message", query);
+            userInput.value = "";
+            
+            appendTypingIndicator();
+
+            fetch("/get_response", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                removeTypingIndicator();
+                appendMessage("bot-message", data.response);
+            })
+            .catch(error => {
+                removeTypingIndicator();
+                appendMessage("bot-message", "Error: " + error.message);
+            });
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        function appendTypingIndicator() {
+            const chatBox = document.getElementById("chat-box");
+            const typingDiv = document.createElement("div");
+            typingDiv.id = "typing-indicator";
+            typingDiv.classList.add("bot-message");
+            typingDiv.innerText = "Bot is typing...";
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById("typing-indicator");
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        window.onload = function() {
+            appendMessage("bot-message", "Welcome to the HealthMate. I am here to solve all your health related questions.");
+        };
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 1200px;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .chat-box {
+            flex: 1;
+            height: 450px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            background: white;
+            align-items: center;
+        }
+
+        .chat-input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-input-container button {
+            padding: 10px 15px;
+            margin-left: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .chat-input-container button i {
+            font-size: 16px;
+        }
+
+        .user-message, .bot-message {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .user-message {
+            text-align: right;
+            background: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            text-align: left;
+            background: #e0e0e0;
+            color: black;
+            align-self: flex-start;
+        }
+    </style>
+</body>
+</html>
