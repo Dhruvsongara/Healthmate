@@ -7,7 +7,7 @@
 ## 📦 Installation
 
 1. **Download the ZIP file from GitHub**  
-   Download the full project ZIP from [this link](#).
+   Download the full project ZIP from [https://github.com/Dhruvsongara/Healthmate/blob/main/HealthMate%20Chatbot.zip](#).
 
 2. **Extract the ZIP file**  
    Unzip the downloaded file into your desired directory.
@@ -54,17 +54,17 @@ Follow these steps to run the chatbot:
 2. **Step 2 – Create Vector Memory**
 Run the following script to create memory for the language model:
 
-  python create_memor_for_llm.py
+    python create_memor_for_llm.py
 
 3. **Step 3 – Connect Memory to LLM**
 In a new terminal, start the memory connection process:
 
-  python connect_memory_with_llm.py
+    python connect_memory_with_llm.py
 
 4. **Step 4 – Start the Chatbot UI**
 In another terminal (while the memory is still connected), run:
 
-  python healthmate.py
+    python healthmate.py
 
 Go to given port in your terminal in your browser to start chatting with HealthMate.
 
