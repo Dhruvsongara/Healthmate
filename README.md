@@ -5,7 +5,7 @@
 ---
 
 ### 💬 Screenshot
-![Chatbot ](./healthmate.gif)
+![Chatbot ](./healthmate.png)
 
 ---
 
