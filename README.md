@@ -4,6 +4,11 @@
 
 ---
 
+### 💬 Screenshot
+![Chatbot ](./healthmate.gif)
+
+---
+
 ## 📦 Installation
 
 1. **Download the ZIP file from GitHub**  
